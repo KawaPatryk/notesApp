@@ -7,6 +7,13 @@ import {
     Link
 } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
+import React, {useState} from 'react';
+import All from './All/All.js';
+import Home from './Home/Home.js';
+import Work from './Work/Work.js';
+import Personal from './Personal/Personal.js';
+import AddNote from './AddNote/AddNote.js';
+
 
 function App() {
     return (
@@ -15,27 +22,46 @@ function App() {
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#home">Noteapp</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <LinkContainer>
-                            <Nav.Link>All</Nav.Link>
+                        <LinkContainer to='/all'>
+                            <Link>All</Link>
                         </LinkContainer>
-                        <LinkContainer>
-                            <Nav.Link>Home</Nav.Link>
+                        <LinkContainer to='/home'>
+                            <Link>Home</Link>
                         </LinkContainer>
-                        <LinkContainer>
-                            <Nav.Link>Work</Nav.Link>
+                        <LinkContainer to='work'>
+                            <Link>Work</Link>
                         </LinkContainer>
-                        <LinkContainer>
-                            <Nav.Link>Personal</Nav.Link>
+                        <LinkContainer to="personal">
+                            <Link>Personal</Link>
                         </LinkContainer>
-                        <LinkContainer>
-                            <Nav.Link>ADD NOTE</Nav.Link>
+                        <LinkContainer to='addNote'>
+                            <Link>ADD NOTE</Link>
                         </LinkContainer>
-                    </Nav>+++
+                    </Nav>
                     <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2"/>
                         <Button variant="outline-info">Search</Button>
                     </Form>
                 </Navbar>
+            </div>
+            <div className='container row'>
+                <Switch>
+                    <Route path="/all">
+                        <All/>
+                    </Route>
+                    <Route path="/home">
+                        <Home/>
+                    </Route>
+                    <Route path="/work">
+                        <Work/>
+                    </Route>
+                    <Route path="/personal">
+                        <Personal/>
+                    </Route>
+                    <Route path="/addNote">
+                        <AddNote/>
+                    </Route>
+                </Switch>
             </div>
         </Router>
     );
