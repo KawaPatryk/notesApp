@@ -1,4 +1,3 @@
-import './App.css';
 import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
 import {
     BrowserRouter as Router,
@@ -8,34 +7,40 @@ import {
 } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import React, {useState} from 'react';
-import All from './All/All.js';
-import Home from './Home/Home.js';
-import Work from './Work/Work.js';
-import Personal from './Personal/Personal.js';
+import DisplayNotes from './DisplayNotes/DisplayNotes.js';
 import AddNote from './AddNote/AddNote.js';
+
+import './App.css';
 
 
 function App() {
+    const hardcodedNotes = [
+        {topic: "Note topic", description: "Description", date: "March 20, 2021", category: 'home'},
+        {topic: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
+        {topic: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
+        {topic: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
+    ];
+    const [notes, setNotes] = useState(hardcodedNotes);
     return (
         <Router>
-            <div className="container row">
+            <div className="container">
                 <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand href="#home">Noteapp</Navbar.Brand>
+                    <Navbar.Brand href="/all">Noteapp</Navbar.Brand>
                     <Nav className="mr-auto">
                         <LinkContainer to='/all'>
-                            <Link>All</Link>
+                            <Link className="navbarView">All</Link>
                         </LinkContainer>
                         <LinkContainer to='/home'>
-                            <Link>Home</Link>
+                            <Link className="navbarView">Home</Link>
                         </LinkContainer>
                         <LinkContainer to='work'>
-                            <Link>Work</Link>
+                            <Link className="navbarView">Work</Link>
                         </LinkContainer>
                         <LinkContainer to="personal">
-                            <Link>Personal</Link>
+                            <Link className="navbarView">Personal</Link>
                         </LinkContainer>
                         <LinkContainer to='addNote'>
-                            <Link>ADD NOTE</Link>
+                            <Link className="navbarView">ADD NOTE</Link>
                         </LinkContainer>
                     </Nav>
                     <Form inline>
@@ -44,19 +49,19 @@ function App() {
                     </Form>
                 </Navbar>
             </div>
-            <div className='container row'>
+            <div className='container'>
                 <Switch>
                     <Route path="/all">
-                        <All/>
+                        <DisplayNotes notes={notes}/>
                     </Route>
                     <Route path="/home">
-                        <Home/>
+                        <DisplayNotes notes={notes.filter(note => note.category === 'home')}/>
                     </Route>
                     <Route path="/work">
-                        <Work/>
+                        <DisplayNotes notes={notes.filter(note => note.category === 'work')}/>
                     </Route>
                     <Route path="/personal">
-                        <Personal/>
+                        <DisplayNotes notes={notes.filter(note => note.category === 'personal')}/>
                     </Route>
                     <Route path="/addNote">
                         <AddNote/>
