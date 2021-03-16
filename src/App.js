@@ -1,4 +1,4 @@
-import {Navbar, Nav, Form, FormControl, Button} from 'react-bootstrap'
+import {Navbar, Nav, Form, FormControl, Button, Modal} from 'react-bootstrap'
 import {
     BrowserRouter as Router,
     Switch,
@@ -20,7 +20,13 @@ function App() {
         {topic: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
         {topic: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
     ];
+
     const [notes, setNotes] = useState(hardcodedNotes);
+    const [showModal,setShowModal] = useState(false);
+
+    const handleClose = () => {
+
+    }
     return (
         <Router>
             <div className="container">
@@ -64,9 +70,12 @@ function App() {
                         <DisplayNotes notes={notes.filter(note => note.category === 'personal')}/>
                     </Route>
                     <Route path="/addNote">
-                        <AddNote/>
+
                     </Route>
                 </Switch>
+                <Modal size="xl" show={showModal} onHide={handleClose}>
+                    <AddNote/>
+                </Modal>
             </div>
         </Router>
     );

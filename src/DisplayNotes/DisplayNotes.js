@@ -1,12 +1,17 @@
 import React from 'react';
-import SingleNote from "../SingleNote/SingleNote";
 
 const DisplayNotes = ({notes}) => {
     console.log(notes)
     return (
         <div className="container">
             {notes.map(note => {
-                return <SingleNote note={note}/>
+                return (
+                    <div className="container" style={{borderStyle: "solid", borderColor: "blue", width: "50%", display:"inline-block"}}>
+                        <label><input type="checkbox"/> {note.topic}</label>
+                        <p>{note.description}</p>
+                        <p>{note.date}</p>
+                    </div>
+                )
             })}
         </div>
     )
