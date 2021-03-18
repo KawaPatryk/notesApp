@@ -15,17 +15,32 @@ import './App.css';
 
 function App() {
     const hardcodedNotes = [
-        {topic: "Note topic", description: "Description", date: "March 20, 2021", category: 'home'},
-        {topic: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
-        {topic: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
-        {topic: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
+        {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
+        {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
+        {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
+        {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
     ];
 
-    const [notes, setNotes] = useState(hardcodedNotes);
-    const [showModal,setShowModal] = useState(false);
+    const [notes, setNotes] = useState([]);
+    const [showModal, setShowModal] = useState(true);
 
     const handleClose = () => {
+        setShowModal(false);
+    }
 
+    const handleOpen = () => {
+        setShowModal(true);
+    }
+
+    const handleCreateNote = (note) => {
+        setNotes(prevState => {
+            //moze nie dzialac jak bede chcial edytowac bo mutowanie stanu
+                let newState = [...prevState];
+                newState.push(note);
+                return newState
+            }
+        )
+        console.log(notes);
     }
     return (
         <Router>
@@ -46,7 +61,9 @@ function App() {
                             <Link className="navbarView">Personal</Link>
                         </LinkContainer>
                         <LinkContainer to='addNote'>
-                            <Link className="navbarView">ADD NOTE</Link>
+                            <Link className="navbarView">
+                                <span onClick={handleOpen}>+ ADD NOTE</span>
+                            </Link>
                         </LinkContainer>
                     </Nav>
                     <Form inline>
@@ -70,12 +87,12 @@ function App() {
                         <DisplayNotes notes={notes.filter(note => note.category === 'personal')}/>
                     </Route>
                     <Route path="/addNote">
-
+                        <Modal size="lg" show={showModal} onHide={handleClose}>
+                            <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
+                        </Modal>
                     </Route>
                 </Switch>
-                <Modal size="xl" show={showModal} onHide={handleClose}>
-                    <AddNote/>
-                </Modal>
+
             </div>
         </Router>
     );
