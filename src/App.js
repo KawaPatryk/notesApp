@@ -14,15 +14,15 @@ import './App.css';
 
 
 function App() {
-    const hardcodedNotes = [
-        {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
-        {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
-        {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
-        {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
-    ];
+    // const hardcodedNotes = [
+    //     {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
+    //     {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
+    //     {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
+    //     {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
+    // ];
 
     const [notes, setNotes] = useState([]);
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     const handleClose = () => {
         setShowModal(false);
@@ -60,11 +60,14 @@ function App() {
                         <LinkContainer to="personal">
                             <Link className="navbarView">Personal</Link>
                         </LinkContainer>
-                        <LinkContainer to='addNote'>
+                        {/*<LinkContainer to='addNote'>*/}
                             <Link className="navbarView">
                                 <span onClick={handleOpen}>+ ADD NOTE</span>
+                                <Modal size="lg" show={showModal} onHide={handleClose}>
+                                    <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
+                                </Modal>
                             </Link>
-                        </LinkContainer>
+                        {/*</LinkContainer>*/}
                     </Nav>
                     <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2"/>
@@ -86,11 +89,11 @@ function App() {
                     <Route path="/personal">
                         <DisplayNotes notes={notes.filter(note => note.category === 'personal')}/>
                     </Route>
-                    <Route path="/addNote">
-                        <Modal size="lg" show={showModal} onHide={handleClose}>
-                            <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
-                        </Modal>
-                    </Route>
+                    {/*<Route path="/addNote">*/}
+                    {/*    <Modal size="lg" show={showModal} onHide={handleClose}>*/}
+                    {/*        <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>*/}
+                    {/*    </Modal>*/}
+                    {/*</Route>*/}
                 </Switch>
 
             </div>

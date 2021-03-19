@@ -1,20 +1,43 @@
 import React from 'react';
+import {Card} from 'react-bootstrap';
+import {PencilIcon, TrashIcon} from '@primer/octicons-react'
 
 const DisplayNotes = ({notes}) => {
-    console.log(notes)
-    return (
-        <div className="container">
-            {notes.map(note => {
-                return (
-                    <div className="container" style={{borderStyle: "solid", borderColor: "blue", width: "50%", display:"inline-block"}}>
-                        <label><input type="checkbox"/> {note.title}</label>
-                        <p>{note.description}</p>
-                        <p>{note.date}</p>
-                    </div>
-                )
-            })}
-        </div>
-    )
-};
+        console.log(notes)
+        const colorMap = new Map();
+        colorMap.set('home', 'primary');
+        colorMap.set('work', 'success');
+        colorMap.set('personal', 'warning');
+
+        return (
+            <div style={{margin: '0px', marginTop: '5px'}} className='container row'>
+                {
+                    notes.map((note) => {
+                            return <Card
+                                bg={colorMap.get(note.category)}
+                                text={'light'}
+                                style={{width: '48%', margin: '1%'}}
+                                className="mb-2"
+                            >
+                                <Card.Header as='h3'>
+                                    <label><input type='checkbox'/> {note.title}</label>
+                                    <span onClick={() => alert('edit clicked')}><PencilIcon size={24} /></span>
+                                    <span onClick={() => alert('delete clicked')}><TrashIcon size={24} /></span>
+
+                                </Card.Header>
+                                <Card.Body>
+                                    <Card.Title>{note.title} </Card.Title>
+                                    <Card.Text>
+                                        {note.date}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        }
+                    )
+                }
+            </div>
+        )
+    }
+;
 
 export default DisplayNotes;

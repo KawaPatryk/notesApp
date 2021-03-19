@@ -7,7 +7,8 @@ const AddNote = ({close, handleCreateNote}) => {
     const [category, setCategory] = useState('home');
 
     const noteCreation = () => {
-        const note = {title: title, description: description, category: category};
+        let currDate = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+        const note = {title: title, description: description, category: category, date: currDate};
         handleCreateNote(note);
     }
 
