@@ -14,23 +14,23 @@ import './App.css';
 
 
 function App() {
-    // const hardcodedNotes = [
-    //     {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
-    //     {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
-    //     {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
-    //     {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
-    // ];
+    const hardcodedNotes = [
+        {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
+        {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
+        {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
+        {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
+    ];
 
-    const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = useState([...hardcodedNotes]);
     const [showModal, setShowModal] = useState(false);
 
     const handleClose = () => {
         setShowModal(false);
-    }
+    };
 
     const handleOpen = () => {
         setShowModal(true);
-    }
+    };
 
     const handleCreateNote = (note) => {
         setNotes(prevState => {
@@ -39,9 +39,21 @@ function App() {
                 newState.push(note);
                 return newState
             }
-        )
+        );
         console.log(notes);
-    }
+    };
+
+    const handleNoteEdit = (note) => {
+        setShowModal(true);
+        console.log(note);
+        <AddNote close={handleClose} handleCreateNote={handleCreateNote} note={note}/>
+
+    };
+
+    // const handleDelete = () => {
+    //
+    // }
+
     return (
         <Router>
             <div className="container">
@@ -78,16 +90,16 @@ function App() {
             <div className='container'>
                 <Switch>
                     <Route path="/all">
-                        <DisplayNotes notes={notes}/>
+                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes}/>
                     </Route>
                     <Route path="/home">
-                        <DisplayNotes notes={notes.filter(note => note.category === 'home')}/>
+                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'home')}/>
                     </Route>
                     <Route path="/work">
-                        <DisplayNotes notes={notes.filter(note => note.category === 'work')}/>
+                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'work')}/>
                     </Route>
                     <Route path="/personal">
-                        <DisplayNotes notes={notes.filter(note => note.category === 'personal')}/>
+                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'personal')}/>
                     </Route>
                     {/*<Route path="/addNote">*/}
                     {/*    <Modal size="lg" show={showModal} onHide={handleClose}>*/}

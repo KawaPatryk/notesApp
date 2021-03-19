@@ -1,16 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Modal, Button} from "react-bootstrap";
 
-const AddNote = ({close, handleCreateNote}) => {
+const AddNote = ({close, handleCreateNote, note}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('home');
 
     const noteCreation = () => {
-        let currDate = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+        let currDate = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
         const note = {title: title, description: description, category: category, date: currDate};
         handleCreateNote(note);
-    }
+    };
+    console.log(note)
+    useEffect(() => {
+        console.log('useEffect odpalony')
+        console.log(note);
+        if (note) {
+            console.log('wbilem tutaj')
+            setTitle(note.title);
+            setDescription(description.title);
+            setCategory(category.title);
+        }
+    });
 
     return (
         <div>
@@ -25,7 +36,8 @@ const AddNote = ({close, handleCreateNote}) => {
                         <div className="input-group-prepend">
                             <span className="input-group-text" id="inputGroup-sizing-default">Add title...</span>
                         </div>
-                        <input onChange={event => setTitle(event.target.value)} type="text" className="form-control"
+                        <input value={title} onChange={event => setTitle(event.target.value)} type="text"
+                               className="form-control"
                                aria-label="Sizing example input"
                                aria-describedby="inputGroup-sizing-default"/>
                     </div>
@@ -35,7 +47,8 @@ const AddNote = ({close, handleCreateNote}) => {
                             <label className="input-group-text"
                                    htmlFor="inputGroupSelect01">Select Category</label>
                         </div>
-                        <select onChange={event => setCategory(event.currentTarget.value)} className="custom-select" id="inputGroupSelect01">
+                        <select value={category} onChange={event => setCategory(event.currentTarget.value)}
+                                className="custom-select" id="inputGroupSelect01">
                             <option value="home">Home</option>
                             <option value="work">Work</option>
                             <option value="personal">Personal</option>
@@ -46,7 +59,8 @@ const AddNote = ({close, handleCreateNote}) => {
                         <div className="input-group-prepend">
                             <span className="input-group-text">Add description...</span>
                         </div>
-                        <textarea onChange={e => setDescription(e.target.value)} className="form-control"
+                        <textarea value={description} onChange={e => setDescription(e.target.value)}
+                                  className="form-control"
                                   aria-label="With textarea" cols="40" rows="6"/>
                     </div>
 

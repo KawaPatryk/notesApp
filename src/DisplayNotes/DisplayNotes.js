@@ -1,9 +1,10 @@
 import React from 'react';
 import {Card} from 'react-bootstrap';
 import {PencilIcon, TrashIcon} from '@primer/octicons-react'
+import AddNote from '../AddNote/AddNote';
 
-const DisplayNotes = ({notes}) => {
-        console.log(notes)
+const DisplayNotes = ({handleNoteEdit, notes}) => {
+        // console.log(notes)
         const colorMap = new Map();
         colorMap.set('home', 'primary');
         colorMap.set('work', 'success');
@@ -21,8 +22,10 @@ const DisplayNotes = ({notes}) => {
                             >
                                 <Card.Header as='h3'>
                                     <label><input type='checkbox'/> {note.title}</label>
-                                    <span onClick={() => alert('edit clicked')}><PencilIcon size={24} /></span>
-                                    <span onClick={() => alert('delete clicked')}><TrashIcon size={24} /></span>
+                                    <span onClick={() => handleNoteEdit(note)}>
+                                        <PencilIcon size={24}/>
+                                    </span>
+                                    <span onClick={() => alert('delete clicked')}><TrashIcon size={24}/></span>
 
                                 </Card.Header>
                                 <Card.Body>
