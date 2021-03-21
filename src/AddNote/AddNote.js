@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Modal, Button} from "react-bootstrap";
 
-const AddNote = ({close, handleCreateNote, note}) => {
+const AddNote = ({handleClose, handleCreateNote, note}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('home');
@@ -14,7 +14,6 @@ const AddNote = ({close, handleCreateNote, note}) => {
     console.log(note)
     useEffect(() => {
         console.log('useEffect odpalony')
-        console.log(note);
         if (note) {
             console.log('wbilem tutaj')
             setTitle(note.title);
@@ -67,7 +66,7 @@ const AddNote = ({close, handleCreateNote, note}) => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={close}>Close</Button>
+                    <Button variant="secondary" onClick={handleClose}>Close</Button>
                     <Button variant="primary" onClick={() => noteCreation()}>Add</Button>
                 </Modal.Footer>
             </Modal.Dialog>

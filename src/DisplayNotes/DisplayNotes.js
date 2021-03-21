@@ -3,13 +3,13 @@ import {Card} from 'react-bootstrap';
 import {PencilIcon, TrashIcon} from '@primer/octicons-react'
 import AddNote from '../AddNote/AddNote';
 
-const DisplayNotes = ({handleNoteEdit, notes}) => {
+const DisplayNotes = ({handleDelete ,handleNoteEdit, notes}) => {
         // console.log(notes)
         const colorMap = new Map();
         colorMap.set('home', 'primary');
         colorMap.set('work', 'success');
         colorMap.set('personal', 'warning');
-
+        console.log(notes)
         return (
             <div style={{margin: '0px', marginTop: '5px'}} className='container row'>
                 {
@@ -25,7 +25,7 @@ const DisplayNotes = ({handleNoteEdit, notes}) => {
                                     <span onClick={() => handleNoteEdit(note)}>
                                         <PencilIcon size={24}/>
                                     </span>
-                                    <span onClick={() => alert('delete clicked')}><TrashIcon size={24}/></span>
+                                    <span onClick={() => handleDelete(note)}><TrashIcon size={24}/></span>
 
                                 </Card.Header>
                                 <Card.Body>

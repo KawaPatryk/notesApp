@@ -3,15 +3,16 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap';
 import React, {useState} from 'react';
 import DisplayNotes from './DisplayNotes/DisplayNotes.js';
 import AddNote from './AddNote/AddNote.js';
-
 import './App.css';
 
+let cloneDeep = require("lodash.clonedeep")
 
 function App() {
     const hardcodedNotes = [
@@ -23,6 +24,7 @@ function App() {
 
     const [notes, setNotes] = useState([...hardcodedNotes]);
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleClose = () => {
         setShowModal(false);
@@ -34,7 +36,7 @@ function App() {
 
     const handleCreateNote = (note) => {
         setNotes(prevState => {
-            //moze nie dzialac jak bede chcial edytowac bo mutowanie stanu
+                //moze nie dzialac jak bede chcial edytowac bo mutowanie stanu
                 let newState = [...prevState];
                 newState.push(note);
                 return newState
@@ -44,15 +46,31 @@ function App() {
     };
 
     const handleNoteEdit = (note) => {
-        setShowModal(true);
-        console.log(note);
-        <AddNote close={handleClose} handleCreateNote={handleCreateNote} note={note}/>
+
+        console.log("handleNoteEdit run");
+        handleOpen();
+        <AddNote handleClose={handleClose} handleCreateNote={handleCreateNote} note={note}/>;
+
 
     };
 
-    // const handleDelete = () => {
-    //
-    // }
+    const handleDelete = ({title}) => {
+        setNotes(prevState => {
+            let newState = cloneDeep(prevState);
+            return newState.filter(note => note.title !== title);
+        })
+    };
+
+    const isSearched = searchTerm => {
+        return item => {
+            return !searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        }
+    };
+
+    const onSearchChange = event => {
+        setSearchTerm(event.target.value)
+        // console.log(searchTerm)
+    };
 
     return (
         <Router>
@@ -72,40 +90,36 @@ function App() {
                         <LinkContainer to="personal">
                             <Link className="navbarView">Personal</Link>
                         </LinkContainer>
-                        {/*<LinkContainer to='addNote'>*/}
-                            <Link className="navbarView">
-                                <span onClick={handleOpen}>+ ADD NOTE</span>
-                                <Modal size="lg" show={showModal} onHide={handleClose}>
-                                    <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
-                                </Modal>
-                            </Link>
-                        {/*</LinkContainer>*/}
+                        <Link className="navbarView">
+                            <span onClick={handleOpen}>+ ADD NOTE</span>
+                            <Modal size="lg" show={showModal} onHide={handleClose}>
+                                <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
+                            </Modal>
+                        </Link>
                     </Nav>
                     <Form inline>
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2"/>
-                        <Button variant="outline-info">Search</Button>
+                        <FormControl value={searchTerm} onChange={onSearchChange} type="text" placeholder="Search" className="mr-sm-2"/>
                     </Form>
                 </Navbar>
             </div>
             <div className='container'>
+                <Redirect to="/all"/>
                 <Switch>
                     <Route path="/all">
-                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes}/>
+                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit} notes={notes.filter(isSearched(searchTerm))}/>
                     </Route>
                     <Route path="/home">
-                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'home')}/>
+                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
+                                      notes={notes.filter(note => note.category === 'home').filter(isSearched(searchTerm))}/>
                     </Route>
                     <Route path="/work">
-                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'work')}/>
+                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
+                                      notes={notes.filter(note => note.category === 'work').filter(isSearched(searchTerm))}/>
                     </Route>
                     <Route path="/personal">
-                        <DisplayNotes handleNoteEdit={handleNoteEdit} notes={notes.filter(note => note.category === 'personal')}/>
+                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
+                                      notes={notes.filter(note => note.category === 'personal').filter(isSearched(searchTerm))}/>
                     </Route>
-                    {/*<Route path="/addNote">*/}
-                    {/*    <Modal size="lg" show={showModal} onHide={handleClose}>*/}
-                    {/*        <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>*/}
-                    {/*    </Modal>*/}
-                    {/*</Route>*/}
                 </Switch>
 
             </div>
