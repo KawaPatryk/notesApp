@@ -12,7 +12,7 @@ import DisplayNotes from './DisplayNotes/DisplayNotes.js';
 import AddNote from './AddNote/AddNote.js';
 import './App.css';
 
-let cloneDeep = require("lodash.clonedeep")
+let cloneDeep = require("lodash.clonedeep");
 
 function App() {
     const hardcodedNotes = [
@@ -98,7 +98,8 @@ function App() {
                         </Link>
                     </Nav>
                     <Form inline>
-                        <FormControl value={searchTerm} onChange={onSearchChange} type="text" placeholder="Search" className="mr-sm-2"/>
+                        <FormControl value={searchTerm} onChange={onSearchChange} type="text" placeholder="Search"
+                                     className="mr-sm-2"/>
                     </Form>
                 </Navbar>
             </div>
@@ -106,19 +107,20 @@ function App() {
                 <Redirect to="/all"/>
                 <Switch>
                     <Route path="/all">
-                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit} notes={notes.filter(isSearched(searchTerm))}/>
+                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
+                                      notes={notes.filter(isSearched(searchTerm))}/>
                     </Route>
                     <Route path="/home">
                         <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'home').filter(isSearched(searchTerm))}/>
+                                      notes={notes.filter(note => note.category === 'home' && isSearched(searchTerm)(note))}/>
                     </Route>
                     <Route path="/work">
                         <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'work').filter(isSearched(searchTerm))}/>
+                                      notes={notes.filter(note => note.category === 'work' && isSearched(searchTerm)(note))}/>
                     </Route>
                     <Route path="/personal">
                         <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'personal').filter(isSearched(searchTerm))}/>
+                                      notes={notes.filter(note => note.category === 'personal' && isSearched(searchTerm)(note))}/>
                     </Route>
                 </Switch>
 
