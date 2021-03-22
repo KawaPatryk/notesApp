@@ -9,22 +9,36 @@ import {
 import {LinkContainer} from 'react-router-bootstrap';
 import React, {useState} from 'react';
 import DisplayNotes from './DisplayNotes/DisplayNotes.js';
-import AddNote from './AddNote/AddNote.js';
+import AddEditNote from './AddEditNote/AddEditNote.js';
 import './App.css';
 
 let cloneDeep = require("lodash.clonedeep");
 
 function App() {
     const hardcodedNotes = [
-        {title: "Note title", description: "Description", date: "March 20, 2021", category: 'home'},
-        {title: "Another note", description: "Jakis tam opis xD", date: "April 02, 2021", category: 'home'},
-        {title: "Wyprowadz dziewczyne", description: "Kolejna notatka", date: "March 11, 2021", category: 'work'},
-        {title: "Wyprowadz psa", description: "piesek sobie idzie", date: "March 11, 2021", category: 'personal'}
+        {
+            title: "Buy milk",
+            description: "There is milk sale in a local store",
+            date: '2021/03/22',
+            category: 'home',
+            strikethrough : false,
+            id: 0
+        },
+        {
+            title: "Lorem ipsum dolor sit amet",
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            date: '2021/03/22',
+            category: 'work',
+            strikethrough : false,
+            id: 1
+        },
     ];
 
     const [notes, setNotes] = useState([...hardcodedNotes]);
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [editNote, setEditNote] = useState("");
+
 
     const handleClose = () => {
         setShowModal(false);
@@ -32,6 +46,7 @@ function App() {
 
     const handleOpen = () => {
         setShowModal(true);
+        setEditNote("");
     };
 
     const handleCreateNote = (note) => {
@@ -42,16 +57,7 @@ function App() {
                 return newState
             }
         );
-        console.log(notes);
-    };
-
-    const handleNoteEdit = (note) => {
-
-        console.log("handleNoteEdit run");
-        handleOpen();
-        <AddNote handleClose={handleClose} handleCreateNote={handleCreateNote} note={note}/>;
-
-
+        // console.log(notes);
     };
 
     const handleDelete = ({title}) => {
@@ -72,28 +78,50 @@ function App() {
         // console.log(searchTerm)
     };
 
+    const handleModalPopulation = (note) => {
+        handleOpen();
+        setEditNote(note);
+    };
+
+
+    const handleNoteEdit = (noteToEdit) => {
+        //Czy ta operacje da sie napisac szybciej?
+        setNotes(prevState => {
+            let newState = cloneDeep(prevState);
+            let note = newState[newState.findIndex(note => note.id === noteToEdit.id)];
+            note.title = noteToEdit.title;
+            note.description = noteToEdit.description;
+            note.category = noteToEdit.category;
+            return newState;
+
+        })
+    }
+
+    const handleCheckbox = (value, noteId) => {
+        setNotes(prevState => {
+            let newState = cloneDeep(prevState);
+            let note = newState[newState.findIndex(note=> note.id === noteId)]
+            note.strikethrough = !note.strikethrough;
+            return newState
+        })
+    }
+
+
     return (
         <Router>
             <div className="container">
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="/all">Noteapp</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <LinkContainer to='/all'>
-                            <Link className="navbarView">All</Link>
-                        </LinkContainer>
-                        <LinkContainer to='/home'>
-                            <Link className="navbarView">Home</Link>
-                        </LinkContainer>
-                        <LinkContainer to='work'>
-                            <Link className="navbarView">Work</Link>
-                        </LinkContainer>
-                        <LinkContainer to="personal">
-                            <Link className="navbarView">Personal</Link>
-                        </LinkContainer>
+                        <Link to='/all' className="navbarView" >All</Link>
+                        <Link to='/home' className="navbarView">Home</Link>
+                        <Link to='/work' className="navbarView">Work</Link>
+                        <Link to='/personal' className="navbarView">Personal</Link>
                         <Link className="navbarView">
                             <span onClick={handleOpen}>+ ADD NOTE</span>
                             <Modal size="lg" show={showModal} onHide={handleClose}>
-                                <AddNote close={handleClose} handleCreateNote={handleCreateNote}/>
+                                <AddEditNote handleClose={handleClose} handleCreateNote={handleCreateNote}
+                                             note={editNote} handleNoteEdit={handleNoteEdit}/>
                             </Modal>
                         </Link>
                     </Nav>
@@ -107,20 +135,20 @@ function App() {
                 <Redirect to="/all"/>
                 <Switch>
                     <Route path="/all">
-                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(isSearched(searchTerm))}/>
+                        <DisplayNotes handleDelete={handleDelete} handleModalPopulation={handleModalPopulation}
+                                      notes={notes.filter(isSearched(searchTerm))} handleCheckbox={handleCheckbox}/>
                     </Route>
                     <Route path="/home">
-                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'home' && isSearched(searchTerm)(note))}/>
+                        <DisplayNotes handleDelete={handleDelete} handleModalPopulation={handleModalPopulation}
+                                      notes={notes.filter(note => note.category === 'home' && isSearched(searchTerm)(note))} handleCheckbox={handleCheckbox}/>
                     </Route>
                     <Route path="/work">
-                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'work' && isSearched(searchTerm)(note))}/>
+                        <DisplayNotes handleDelete={handleDelete} handleModalPopulation={handleModalPopulation}
+                                      notes={notes.filter(note => note.category === 'work' && isSearched(searchTerm)(note))} handleCheckbox={handleCheckbox}/>
                     </Route>
                     <Route path="/personal">
-                        <DisplayNotes handleDelete={handleDelete} handleNoteEdit={handleNoteEdit}
-                                      notes={notes.filter(note => note.category === 'personal' && isSearched(searchTerm)(note))}/>
+                        <DisplayNotes handleDelete={handleDelete} handleModalPopulation={handleModalPopulation}
+                                      notes={notes.filter(note => note.category === 'personal' && isSearched(searchTerm)(note))} handleCheckbox={handleCheckbox}/>
                     </Route>
                 </Switch>
 

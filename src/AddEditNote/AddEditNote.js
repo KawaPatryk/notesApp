@@ -1,32 +1,38 @@
 import React, {useState, useEffect} from 'react';
 import {Modal, Button} from "react-bootstrap";
 
-const AddNote = ({handleClose, handleCreateNote, note}) => {
+const AddEditNote = ({handleClose, handleCreateNote, note, handleNoteEdit}) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('home');
 
+
     const noteCreation = () => {
         let currDate = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
-        const note = {title: title, description: description, category: category, date: currDate};
+        const note = {id: Date.now(), title: title, description: description, category: category, date: currDate};
         handleCreateNote(note);
     };
-    console.log(note)
+
+    const noteEdit = () => {
+        const noteToEdit = {id: note.id, title: title, description: description, category: category}
+        handleNoteEdit(noteToEdit);
+    }
+
+
     useEffect(() => {
-        console.log('useEffect odpalony')
         if (note) {
-            console.log('wbilem tutaj')
+            console.log('Use effect working')
             setTitle(note.title);
-            setDescription(description.title);
-            setCategory(category.title);
+            setDescription(note.description);
+            setCategory(note.category);
         }
-    });
+    }, note);
 
     return (
         <div>
             <Modal.Dialog>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Note</Modal.Title>
+                    <Modal.Title>{note ? "Update" : "Add"}</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -67,11 +73,12 @@ const AddNote = ({handleClose, handleCreateNote, note}) => {
 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>Close</Button>
-                    <Button variant="primary" onClick={() => noteCreation()}>Add</Button>
+                    <Button variant="primary"
+                            onClick={note ? () => noteEdit() : () => noteCreation()}>{note ? "Update" : "Add"}</Button>
                 </Modal.Footer>
             </Modal.Dialog>
         </div>
     )
 }
 
-export default AddNote;
+export default AddEditNote;
