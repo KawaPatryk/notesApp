@@ -51,13 +51,11 @@ function App() {
 
     const handleCreateNote = (note) => {
         setNotes(prevState => {
-                //moze nie dzialac jak bede chcial edytowac bo mutowanie stanu
                 let newState = [...prevState];
                 newState.push(note);
                 return newState
             }
         );
-        // console.log(notes);
     };
 
     const handleDelete = ({title}) => {
@@ -75,7 +73,6 @@ function App() {
 
     const onSearchChange = event => {
         setSearchTerm(event.target.value)
-        // console.log(searchTerm)
     };
 
     const handleModalPopulation = (note) => {
@@ -85,7 +82,6 @@ function App() {
 
 
     const handleNoteEdit = (noteToEdit) => {
-        //Czy ta operacje da sie napisac szybciej?
         setNotes(prevState => {
             let newState = cloneDeep(prevState);
             let note = newState[newState.findIndex(note => note.id === noteToEdit.id)];
